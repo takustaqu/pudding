@@ -44,9 +44,22 @@ p.gn = p.generators;
 
 
 
+/*
+
+crossSplit
+
+example.
+
+	var x = new p.gn.crossSplit($("#type_a").get(0),[0.5,0.5]);
+	var ctx = $("#playground").get(0).getContext('2d');
+	x.render(ctx,0,0,100,100,0,0);
+
+*/
+
 p.generators.crossSplit = function(source,centerRatio){
 
 		this.source = source;
+		this.ratio = centerRatio;
 
 		var ltWidth = Math.floor(this.source.width * centerRatio[0]);
 		var ltHeight = Math.floor(this.source.height * centerRatio[1]);
@@ -60,8 +73,33 @@ p.generators.crossSplit = function(source,centerRatio){
 
 	}
 
-p.generators.crossSplit.prototype.render(ctx,dx,dy,dw,dh,ctrX,ctrY) {
+p.generators.crossSplit.prototype.render = function(ctx,dx,dy,dw,dh,ctrX,ctrY) {
 
+	ctrX = Math.floor(ctrX);
+	ctrY = Math.floor(ctrY);
+
+	dltWidth = Math.floor(dw * this.ratio[0]) + ctrX;
+	dltHeight = Math.floor(dh * this.ratio[1]) + ctrY;
+
+	var ax = {
+			a:[dltWidth,dltHeight],
+			b:[dw - dltWidth,dltHeight],
+			c:[dw - dltWidth,dh-dltHeight],
+			d:[dltWidth,dh-dltHeight]
+		}
+
+	//a
+	ctx.drawImage( this.source , 0 , 0 , this.sizes.a[0] , this.sizes.a[1] , dx , dy , ax.a[0] , ax.a[1] );
+
+	//b
+	ctx.drawImage( this.source , this.sizes.a[0] , 0 , this.sizes.b[0] , this.sizes.b[1] , dx + ax.a[0] , dy , ax.b[0] , ax.b[1] );
+
+	//c
+	ctx.drawImage( this.source , this.sizes.a[0], this.sizes.a[1] , this.sizes.c[0] , this.sizes.c[1] , dx + ax.a[0] , dy + ax.a[1] , ax.c[0] , ax.c[1] );
+
+	//d
+	ctx.drawImage( this.source , 0, this.sizes.a[1] , this.sizes.d[0] , this.sizes.d[1] , dx , dy + ax.a[1] , ax.d[0] , ax.d[1] );
+	
 	}
 
 /*********************/
@@ -69,127 +107,3 @@ p.generators.crossSplit.prototype.render(ctx,dx,dy,dw,dh,ctrX,ctrY) {
 
 var p = pudding;
 
-
-
-
-
-
-
-
-
-
-
-var Wobblekit = function($el,option){
-
-	this.option = {
-		center:[0.5,0.5]
-	}
-
-	if(!!option){
-		$.extend(this.option,option);
-	}
-
-	this.$el = $el;
-
-	var elClass = $el.attr("class");
-
-	this.rawsize = {
-		width:$el.get(0).naturalWidth,
-		height:$el.get(0).naturalHeight
-	}
-
-	var canvas = document.createElement("CANVAS");
-	canvas.width = this.rawsize.width;
-	canvas.width = this.rawsize.height;
-	this.canvas = canvas;
-	
-	this.axises = [[[0,0],[0,0]],[[0,0],[0,0]],[[0,0],[0,0]],[[0,0],[0,0]]];
-
-	$(canvas).addClass(elClass);
-	
-
-	(function(center,$img,axises,rawsize){
-	
-		var tmpW = Math.round(center[0] * rawsize.width);
-		var tmpH = Math.round(center[1] * rawsize.height);
-
-		axises[0][1][0] = tmpW;
-		axises[0][1][1] = tmpH;
-
-		axises[1][0][0] = tmpW;
-
-		axises[1][1][0] = rawsize.width;
-		axises[1][1][1] = tmpH;
-
-		axises[2][0][0] = tmpW;
-		axises[2][0][1] = tmpH;
-
-		axises[2][1][0] = rawsize.width;
-		axises[2][1][1] = rawsize.height;
-
-		axises[3][0][1] = tmpH;
-		axises[3][1][0] = tmpW;
-		axises[3][1][1] = rawsize.height;
-
-	})(this.option.center,this.$el,this.axises,this.rawsize);
-
-	this.$el.after($(canvas));
-
-	var ctx = canvas.getContext('2d');
-	var ax = this.axises;
-	ctx.drawImage(this.$el.get(0),
-		ax[0][0][0], ax[0][0][1],
-		ax[2][1][0], ax[2][1][1],
-		ax[0][0][0], ax[0][0][1],
-		ax[2][1][0], ax[2][1][1]);
-
-	$el.remove();
-}
-
-Wobblekit.prototype.setCenter = function(x,y){
-}
-
-Wobblekit.prototype.render = function(x,y){
-
-	if (!x){
-		return false;
-	}
-
-	x = Math.floor(x);
-	y = Math.floor(y);
-
-	var ctx = this.canvas.getContext('2d');
-	var ax = this.axises;
-
-	this.canvas.style.visibility = 'hidden'; // Force a change in DOM
-	this.canvas.offsetHeight; 
-	this.canvas.style.visibility = 'inherit'; 
-
-	
-	ctx.clearRect(0, 0, ax[2][1][0],ax[2][1][1]);
-
-	ctx.drawImage(this.$el.get(0),
-			ax[0][0][0], ax[0][0][1],
-			ax[0][1][0], ax[0][1][1],
-			ax[0][0][0], ax[0][0][1],
-			ax[0][1][0]+x+0.0, ax[0][1][1]+y+0.0);
-
-	ctx.drawImage(this.$el.get(0),
-			ax[1][0][0], ax[1][0][1],
-			ax[1][1][0]-ax[1][0][0], ax[1][1][1]-ax[1][0][1],
-			ax[1][0][0]+x, ax[1][0][1],
-			ax[1][1][0]-ax[1][0][0]-x-0.0, ax[1][1][1]-ax[1][0][1]+y+0.0);
-
-	ctx.drawImage(this.$el.get(0),
-			ax[2][0][0], ax[2][0][1],
-			ax[2][1][0]-ax[2][0][0], ax[2][1][1]-ax[2][0][1],
-			ax[2][0][0]+x, ax[2][0][1]+y,
-			ax[2][1][0]-ax[2][0][0]-x-0.0, ax[2][1][1]-ax[2][0][1]-y-0.0);
-
-	ctx.drawImage(this.$el.get(0),
-			ax[3][0][0], ax[3][0][1],
-			ax[3][1][0]-ax[3][0][0], ax[3][1][1]-ax[3][0][1],
-			ax[3][0][0], ax[3][0][1]+y,
-			ax[3][1][0]-ax[3][0][0]+x+0.0, ax[3][1][1]-ax[3][0][1]-y-0.0);
-
-}
