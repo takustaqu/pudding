@@ -54,7 +54,7 @@
 <script>
 
 var spinseed = new Radkit();
-var strength = 3;
+var strength = 1;
 spinseed.setShapeRatio(1,1);
 
 var pos = {x:0,y:0}
@@ -67,9 +67,13 @@ setInterval(function(){
 </script>
 
 <section>
-
+	
 	<div class="cell">
 		<h2>type A <small>cross grid separation</small></h2>
+<pre>
+var typeA = new p.tie.CrossSplit($("#type_a").get(0),[0.5,0.5]);
+typeA.set(pos.x,pos.y)
+</pre>
 		<img src="assets/grid_with_radial.png" alt="" id="type_a">
 	</div>
 	
