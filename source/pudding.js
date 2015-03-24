@@ -73,34 +73,34 @@ p.generators.crossSplit = function(source,centerRatio){
 
 	}
 
-p.generators.crossSplit.prototype.render = function(ctx,dx,dy,dw,dh,ctrX,ctrY) {
+	p.generators.crossSplit.prototype.render = function(ctx,dx,dy,dw,dh,ctrX,ctrY) {
 
-	ctrX = Math.floor(ctrX);
-	ctrY = Math.floor(ctrY);
+			ctrX = Math.floor(ctrX);
+			ctrY = Math.floor(ctrY);
 
-	dltWidth = Math.floor(dw * this.ratio[0]) + ctrX;
-	dltHeight = Math.floor(dh * this.ratio[1]) + ctrY;
+			dltWidth = Math.floor(dw * this.ratio[0]) + ctrX;
+			dltHeight = Math.floor(dh * this.ratio[1]) + ctrY;
 
-	var ax = {
-			a:[dltWidth,dltHeight],
-			b:[dw - dltWidth,dltHeight],
-			c:[dw - dltWidth,dh-dltHeight],
-			d:[dltWidth,dh-dltHeight]
-		}
+			var ax = {
+					a:[dltWidth,dltHeight],
+					b:[dw - dltWidth,dltHeight],
+					c:[dw - dltWidth,dh-dltHeight],
+					d:[dltWidth,dh-dltHeight]
+				}
 
-	//a
-	ctx.drawImage( this.source , 0 , 0 , this.sizes.a[0] , this.sizes.a[1] , dx , dy , ax.a[0] , ax.a[1] );
+			//Draw part a
+			ctx.drawImage( this.source , 0 , 0 , this.sizes.a[0] , this.sizes.a[1] , dx , dy , ax.a[0] , ax.a[1] );
 
-	//b
-	ctx.drawImage( this.source , this.sizes.a[0] , 0 , this.sizes.b[0] , this.sizes.b[1] , dx + ax.a[0] , dy , ax.b[0] , ax.b[1] );
+			//Draw part b
+			ctx.drawImage( this.source , this.sizes.a[0] , 0 , this.sizes.b[0] , this.sizes.b[1] , dx + ax.a[0] , dy , ax.b[0] , ax.b[1] );
 
-	//c
-	ctx.drawImage( this.source , this.sizes.a[0], this.sizes.a[1] , this.sizes.c[0] , this.sizes.c[1] , dx + ax.a[0] , dy + ax.a[1] , ax.c[0] , ax.c[1] );
+			//Draw part c
+			ctx.drawImage( this.source , this.sizes.a[0], this.sizes.a[1] , this.sizes.c[0] , this.sizes.c[1] , dx + ax.a[0] , dy + ax.a[1] , ax.c[0] , ax.c[1] );
 
-	//d
-	ctx.drawImage( this.source , 0, this.sizes.a[1] , this.sizes.d[0] , this.sizes.d[1] , dx , dy + ax.a[1] , ax.d[0] , ax.d[1] );
-	
-	}
+			//Draw part d
+			ctx.drawImage( this.source , 0, this.sizes.a[1] , this.sizes.d[0] , this.sizes.d[1] , dx , dy + ax.a[1] , ax.d[0] , ax.d[1] );
+			
+		} //prototype.render
 
 /*********************/
 })(pudding)

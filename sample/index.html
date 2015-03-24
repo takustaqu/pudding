@@ -9,6 +9,13 @@
 	
 	<title>pudding.js</title>
 	<style>
+
+		section:after{
+			content:"";
+			display: block;
+			clear:both;
+			}
+			
 		section h2 {
 			border-bottom:1px solid #ccc;
 			display:block;
@@ -66,8 +73,29 @@
 </section>
 
 
-<canvas id="playground" class="preview" width="400" height="400" ></canvas>
 
+<section>
+
+	<h2>Cross-grid separated transform<small>Type A version transform logic</small></h2>
+	<pre>x.render(ctx,16,16,171,171,-20,-20);</pre>
+
+	<canvas id="cross-split-sample" class="preview" width="210" height="210" ></canvas>
+
+	<script>
+		
+		setTimeout(function(){
+
+			//if running on Safari, must be adding load-complete checking.
+			
+			var x = new p.gn.crossSplit($("#type_a").get(0),[0.5,0.5]);
+			var dom = document.getElementById("cross-split-sample");
+			
+			var ctx = dom.getContext('2d');
+			//var ctx = $("#cross-split-sample").get(0).getContext('2d');
+			x.render(ctx,16,16,171,171,-40,-40);
+		},100)
+	</script>
+</section>
 
 </body>
 </html>
