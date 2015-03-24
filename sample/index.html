@@ -4,6 +4,8 @@
 	<meta charset="UTF-8">
 
 	<script src="lib/jquery.js"></script>
+
+	<script src="../source/pudding.js"></script>
 	
 	<title>pudding.js</title>
 	<style>
@@ -27,6 +29,14 @@
 			width:33.333%;
 			float:left;
 		}
+
+		canvas.preview {
+			border:1px solid #ccc;
+			box-shadow:0 2px 10px #ccc;
+			
+		}
+
+
 	</style>
 
 </head>
@@ -54,6 +64,9 @@
 
 	
 </section>
+
+
+<canvas id="playground" class="preview" width="400" height="400" ></canvas>
 
 
 </body>
