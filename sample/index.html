@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 
 	<script src="lib/jquery.js"></script>
+	<script src="lib/radkit.js"></script>
 
 	<script src="../source/pudding.js"></script>
 	
@@ -50,6 +51,21 @@
 <body>
 
 
+<script>
+
+var spinseed = new Radkit();
+var strength = 3;
+spinseed.setShapeRatio(1,1);
+
+var pos = {x:0,y:0}
+
+setInterval(function(){
+	spinseed.setAngle(spinseed.angle + strength);
+	pos = spinseed.getPosition(0,0,60);
+},20)
+
+</script>
+
 <section>
 
 	<div class="cell">
@@ -57,6 +73,19 @@
 		<img src="assets/grid_with_radial.png" alt="" id="type_a">
 	</div>
 	
+
+	<script>
+	setTimeout(function(){
+
+		var typeA = new p.tie.CrossSplit($("#type_a").get(0),[0.5,0.5]);
+		
+		setInterval(function(){
+			typeA.set(pos.x,pos.y)
+		},20)
+	
+	},200);
+
+	</script>
 
 	<div class="cell">
 		<h2>type B <small>Height-map</small></h2>
@@ -84,15 +113,16 @@
 	<script>
 		
 		setTimeout(function(){
-
 			//if running on Safari, must be adding load-complete checking.
-			
-			var x = new p.gn.crossSplit($("#type_a").get(0),[0.5,0.5]);
+			var x = new p.gn.CrossSplit($("#type_a").get(0),[0.5,0.5]);
 			var dom = document.getElementById("cross-split-sample");
 			
 			var ctx = dom.getContext('2d');
 			//var ctx = $("#cross-split-sample").get(0).getContext('2d');
-			x.render(ctx,16,16,171,171,-40,-40);
+			
+			setInterval(function(){
+				x.render(ctx,16,16,171,171,pos.x,pos.y);	
+			},20)
 		},100)
 	</script>
 </section>

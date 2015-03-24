@@ -56,7 +56,7 @@ example.
 
 */
 
-p.generators.crossSplit = function(source,centerRatio){
+p.generators.CrossSplit = function(source,centerRatio){
 
 		this.source = source;
 		this.ratio = centerRatio;
@@ -73,7 +73,7 @@ p.generators.crossSplit = function(source,centerRatio){
 
 	}
 
-	p.generators.crossSplit.prototype.render = function(ctx,dx,dy,dw,dh,ctrX,ctrY) {
+	p.generators.CrossSplit.prototype.render = function(ctx,dx,dy,dw,dh,ctrX,ctrY) {
 
 			ctrX = Math.floor(ctrX);
 			ctrY = Math.floor(ctrY);
@@ -101,6 +101,32 @@ p.generators.crossSplit = function(source,centerRatio){
 			ctx.drawImage( this.source , 0, this.sizes.a[1] , this.sizes.d[0] , this.sizes.d[1] , dx , dy + ax.a[1] , ax.d[0] , ax.d[1] );
 			
 		} //prototype.render
+
+//Image element wrapper;
+p.toImgElement = {};
+p.tie = p.toImgElement;
+
+
+p.tie.CrossSplit = function($element,centerRatio){
+
+	this.elW = $element.width;
+	this.elH = $element.height;
+
+	this.canvas = t.createCanvas(this.elW,this.elH);
+
+	this.gnXS = new p.gn.CrossSplit($element,centerRatio);
+
+	$($element).after(this.canvas.el).hide();
+
+	this.gnXS.render(this.canvas.ctx,0,0,this.elW,this.elH,0,0);
+
+};
+
+p.tie.CrossSplit.prototype.set = function(translateX,translateY){
+	this.canvas.ctx.clearRect(0, 0, this.elW,this.elH);
+	this.gnXS.render(this.canvas.ctx,0,0,this.elW,this.elH,translateX,translateY);	
+};
+
 
 /*********************/
 })(pudding)
