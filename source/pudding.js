@@ -109,18 +109,26 @@ p.tie = p.toImgElement;
 
 p.tie.CrossSplit = function($element,centerRatio){
 
-	this.elW = $element.width;
-	this.elH = $element.height;
+		//cache element size.
+			this.elW = $element.width;
+			this.elH = $element.height;
 
-	this.canvas = t.createCanvas(this.elW,this.elH);
+		//create canvas
+			this.canvas = t.createCanvas(this.elW,this.elH);
 
-	this.gnXS = new p.gn.CrossSplit($element,centerRatio);
+		//create crossSplit object.
+			this.gnXS = new p.gn.CrossSplit($element,centerRatio);
 
-	$($element).after(this.canvas.el).hide();
+		//set canvas after input element.
+			$($element).after(this.canvas.el).hide();
 
-	this.gnXS.render(this.canvas.ctx,0,0,this.elW,this.elH,0,0);
+		//migrate classes
+			$(this.canvas.el).addClass($($element).attr("class"))
 
-};
+		//create initial image
+			this.gnXS.render(this.canvas.ctx,0,0,this.elW,this.elH,0,0);
+
+	};
 
 p.tie.CrossSplit.prototype.set = function(translateX,translateY){
 	this.canvas.ctx.clearRect(0, 0, this.elW,this.elH);
